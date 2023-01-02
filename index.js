@@ -7,7 +7,9 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const uri = "mongodb://0.0.0.0:27017";
+const uri =
+  "mongodb+srv://applyosaca:applyosaca@cluster0.6crvlzi.mongodb.net/?retryWrites=true&w=majority";
+// const uri = "mongodb://0.0.0.0:27017";
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
