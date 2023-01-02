@@ -1,6 +1,7 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const express = require("express");
 const cors = require("cors");
+const { query } = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
 app.use(cors());
@@ -22,31 +23,30 @@ app.get("/", (req, res) => {
 async function run() {
   try {
     app.post("/applications", async (req, res) => {
-      const applications = req.body;
-      const result = await applicationCollection.insertOne({ applications });
+      // const applications = req.body;
+      const result = await applicationCollection.insertOne(req.body);
       res.send(result);
     });
   } catch (error) {
     console.log(error);
   }
   try {
-    app.get("/applicantcopy", async (req, res) => {
+    app.get("/download", async (req, res) => {
       const email = req.query.email;
-      const phone = req.query.phone;
-      //   console.log(email, phone);
-      const allApplications = await applicationCollection.findOne(
-        {
-          email: email,
-        },
-        {}
-      );
-      res.send(allApplications);
+      // const phone = req.query.phone;
+      // console.log(phone, email)
+      const result = await applicationCollection.findOne({ mainEmail: email });
+      res.send(result);
     });
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
+  try {
+    app.get("/allApplication", async (req, res) => {
+      const result = await applicationCollection.find({}).toArray();
+      res.send(result);
+    });
+  } catch (error) {}
 }
-run().catch((err) => console.log(err));
+run().catch((error) => res.send(error));
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}`);
