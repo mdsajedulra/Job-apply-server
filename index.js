@@ -17,6 +17,7 @@ const client = new MongoClient(uri, {
 });
 
 const applicationCollection = client.db("apply").collection("applications");
+const usersCollection = client.db("apply").collection("users");
 
 app.get("/", (req, res) => {
   res.send("Server is running");
@@ -27,6 +28,15 @@ async function run() {
     app.post("/applications", async (req, res) => {
       // const applications = req.body;
       const result = await applicationCollection.insertOne(req.body);
+      res.send(result);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  try {
+    app.post("/user", async (req, res) => {
+      // const applications = req.body;
+      const result = await usersCollection.insertOne(req.body);
       res.send(result);
     });
   } catch (error) {
